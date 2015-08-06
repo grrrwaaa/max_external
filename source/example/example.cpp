@@ -1,6 +1,6 @@
 /**
 	@file
-	main - a max object shell
+	example - a max object shell
 	jeremy bernstein - jeremy@bootsquad.com
 
 	@ingroup	examples
@@ -10,38 +10,38 @@
 #include "ext_obex.h"						// required for new style Max object
 
 ////////////////////////// object struct
-typedef struct _main
+typedef struct _example
 {
 	t_object					ob;			// the object itself (must be first)
-} t_main;
+} t_example;
 
 ///////////////////////// function prototypes
 //// standard set
-void *main_new(t_symbol *s, long argc, t_atom *argv);
-void main_free(t_main *x);
-void main_assist(t_main *x, void *b, long m, long a, char *s);
+void *example_new(t_symbol *s, long argc, t_atom *argv);
+void example_free(t_example *x);
+void example_assist(t_example *x, void *b, long m, long a, char *s);
 
 //////////////////////// global class pointer variable
-void *main_class;
+void *example_class;
 
 
 void ext_main(void *r)
 {
 	t_class *c;
 
-	c = class_new("main", (method)main_new, (method)main_free, (long)sizeof(t_main),
+	c = class_new("example", (method)example_new, (method)example_free, (long)sizeof(t_example),
 				  0L /* leave NULL!! */, A_GIMME, 0);
 
 	/* you CAN'T call this from the patcher */
-	class_addmethod(c, (method)main_assist,			"assist",		A_CANT, 0);
+	class_addmethod(c, (method)example_assist,			"assist",		A_CANT, 0);
 
 	class_register(CLASS_BOX, c); /* CLASS_NOBOX */
-	main_class = c;
+	example_class = c;
 
-	post("I am the main object");
+	post("I am the example object");
 }
 
-void main_assist(t_main *x, void *b, long m, long a, char *s)
+void example_assist(t_example *x, void *b, long m, long a, char *s)
 {
 	if (m == ASSIST_INLET) { // inlet
 		sprintf(s, "I am inlet %ld", a);
@@ -51,18 +51,18 @@ void main_assist(t_main *x, void *b, long m, long a, char *s)
 	}
 }
 
-void main_free(t_main *x)
+void example_free(t_example *x)
 {
 	;
 }
 
 
-void *main_new(t_symbol *s, long argc, t_atom *argv)
+void *example_new(t_symbol *s, long argc, t_atom *argv)
 {
-	t_main *x = NULL;
+	t_example *x = NULL;
 	long i;
 
-	if ((x = (t_main *)object_alloc((t_class *)main_class))) {
+	if ((x = (t_example *)object_alloc((t_class *)example_class))) {
 		object_post((t_object *)x, "a new %s object was instantiated: %p", s->s_name, x);
 		object_post((t_object *)x, "it has %ld arguments", argc);
 
